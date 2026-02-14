@@ -2,32 +2,36 @@
 <html>
   <head>
     <title>Login</title>
+    <link rel="stylesheet" href="layout.css" />
   </head>
   <body>
-    <h2>Login</h2>
-
-    <input type="email" id="email" placeholder="Email" /><br /><br />
-    <input type="password" id="password" placeholder="Password" /><br /><br />
-
-    <button onclick="login()">Login</button>
+    <div class="form-box">
+      <h2>Login</h2>
+      <input id="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+      <p>Belum punya akun? <a href="register.html">Register</a></p>
+    </div>
 
     <script>
+      const API = "http://localhost:3000/api/auth";
       function login() {
-        fetch("http://localhost:3000/api/auth/login", {
+        fetch(API + "/login", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            email: document.getElementById("email").value,
-            password: document.getElementById("password").value,
+            email: email.value,
+            password: password.value,
           }),
         })
-          .then((res) => res.json())
-          .then((data) => {
-            localStorage.setItem("token", data.token);
-            alert("Login berhasil");
-            window.location.href = "index.html";
+          .then((r) => r.json())
+          .then((d) => {
+            if (d.token) {
+              localStorage.setItem("token", d.token);
+              window.location.href = "dashboard.html";
+            } else {
+              alert("Login gagal");
+            }
           });
       }
     </script>

@@ -2,32 +2,33 @@
 <html>
   <head>
     <title>Register</title>
+    <link rel="stylesheet" href="layout.css" />
   </head>
   <body>
-    <h2>Register</h2>
-
-    <input type="text" id="name" placeholder="Nama" /><br /><br />
-    <input type="email" id="email" placeholder="Email" /><br /><br />
-    <input type="password" id="password" placeholder="Password" /><br /><br />
-
-    <button onclick="register()">Register</button>
+    <div class="form-box">
+      <h2>Register</h2>
+      <input id="name" placeholder="Nama" />
+      <input id="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+      <button onclick="register()">Register</button>
+      <p>Sudah punya akun? <a href="login.html">Login</a></p>
+    </div>
 
     <script>
+      const API = "http://localhost:3000/api/auth";
       function register() {
-        fetch("http://localhost:3000/api/auth/register", {
+        fetch(API + "/register", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            name: document.getElementById("name").value,
-            email: document.getElementById("email").value,
-            password: document.getElementById("password").value,
+            name: name.value,
+            email: email.value,
+            password: password.value,
           }),
         })
-          .then((res) => res.json())
-          .then((data) => {
-            alert(data.message);
+          .then((r) => r.json())
+          .then((d) => {
+            alert(d.message);
             window.location.href = "login.html";
           });
       }

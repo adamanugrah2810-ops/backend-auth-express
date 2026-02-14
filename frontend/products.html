@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Products</title>
+    <link rel="stylesheet" href="layout.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="sidebar">
+        <h3>My App</h3>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="users.html">Users</a>
+        <a href="products.html">Products</a>
+        <a href="reports.html">Reports</a>
+        <a href="profile.html">Profile</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </div>
+
+      <div class="content">
+        <div class="navbar">Products</div>
+
+        <a href="add-product.html">
+          <button>+ Tambah Produk</button>
+        </a>
+
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama</th>
+              <th>Harga</th>
+              <th>Stok</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="productTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      const API = "http://localhost:3000/api/products";
+      const productTable = document.getElementById("productTable");
+      const tokenHeader = "Bearer " + localStorage.getItem("token");
+
+      function loadProducts() {
+        fetch(API, {
+          headers: { Authorization: tokenHeader },
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            // Cek apakah backend mengembalikan array langsung atau {products: [...]}
+            let products = data.products || data;
+            let html = "";
+            products.forEach((p) => {
+              html += `
+<tr>
+  <td>${p.id}</td>
+  <td>${p.name}</td>
+  <td>${p.price}</td>
+  <td>${p.stock}</td>
+  <td>
+    <button onclick="edit(${p.id},'${p.name}',${p.price},${p.stock})">Edit</button>
+    <button onclick="hapus(${p.id})">Hapus</button>
+  </td>
+</tr>`;
+            });
+            productTable.innerHTML = html;
+          })
+          .catch((err) => console.error(err));
+      }
+
+      function edit(id, n, p, s) {
+        localStorage.setItem("editProduct", JSON.stringify({ id, n, p, s }));
+        window.location = "add-product.html";
+      }
+
+      function hapus(id) {
+        fetch(API + "/" + id, {
+          method: "DELETE",
+          headers: { Authorization: tokenHeader },
+        })
+          .then((r) => r.json())
+          .then((d) => {
+            alert(d.message);
+            loadProducts();
+          })
+          .catch((err) => console.error(err));
+      }
+
+      function logout() {
+        localStorage.removeItem("token");
+        window.location = "login.html";
+      }
+
+      loadProducts();
+    </script>
+  </body>
+</html>

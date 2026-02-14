@@ -2,66 +2,48 @@
 <html>
   <head>
     <title>Users</title>
+    <link rel="stylesheet" href="layout.css" />
   </head>
   <body>
-    <h2>Daftar User</h2>
-    <button onclick="logout()">Logout</button>
-    <table border="1" cellpadding="5">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nama</th>
-          <th>Email</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="userTable"></tbody>
-    </table>
+    <div class="app">
+      <div class="sidebar">
+        <h3>My App</h3>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="users.html">Users</a>
+        <a href="products.html">Products</a>
+        <a href="reports.html">Reports</a>
+        <a href="profile.html">Profile</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </div>
 
+      <div class="content">
+        <div class="navbar">Users</div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody id="userTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
     <script>
-      const token = localStorage.getItem("token");
-
-      fetch("http://localhost:3000/api/auth/users", {
-        headers: {
-          Authorization: token,
-        },
+      fetch(API + "/users", {
+        headers: { Authorization: localStorage.getItem("token") },
       })
-        .then((res) => res.json())
+        .then((r) => r.json())
         .then((users) => {
-          let rows = "";
+          let html = "";
           users.forEach((u) => {
-            rows += `
-          <tr>
-            <td>${u.id}</td>
-            <td>${u.name}</td>
-            <td>${u.email}</td>
-            <td>
-              <button onclick="hapus(${u.id})">Hapus</button>
-            </td>
-          </tr>
-        `;
+            html += `<tr><td>${u.id}</td><td>${u.name}</td><td>${u.email}</td></tr>`;
           });
-          document.getElementById("userTable").innerHTML = rows;
+          userTable.innerHTML = html;
         });
-
-      function hapus(id) {
-        fetch("http://localhost:3000/api/auth/users/" + id, {
-          method: "DELETE",
-          headers: {
-            Authorization: token,
-          },
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            alert(data.message);
-            location.reload();
-          });
-      }
-
-      function logout() {
-        localStorage.removeItem("token");
-        window.location.href = "login.html";
-      }
     </script>
   </body>
 </html>

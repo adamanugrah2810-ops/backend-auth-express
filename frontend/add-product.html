@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Add Product</title>
+    <link rel="stylesheet" href="layout.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="sidebar">
+        <h3>My App</h3>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="products.html">Products</a>
+      </div>
+
+      <div class="content">
+        <div class="navbar">Form Produk</div>
+
+        <h2 id="title">Tambah Produk</h2>
+
+        <label>Nama Produk</label>
+        <input id="name" type="text" />
+
+        <label>Harga</label>
+        <input id="price" type="number" />
+
+        <label>Stok</label>
+        <input id="stock" type="number" />
+
+        <br /><br />
+
+        <button type="button" onclick="save()">Simpan</button>
+        <a href="products.html"><button type="button">Kembali</button></a>
+      </div>
+    </div>
+
+    <script>
+      const API = "http://localhost:3000/api/products";
+
+      let editData = JSON.parse(localStorage.getItem("editProduct"));
+
+      if (editData) {
+        document.getElementById("title").innerText = "Edit Produk";
+        document.getElementById("name").value = editData.n;
+        document.getElementById("price").value = editData.p;
+        document.getElementById("stock").value = editData.s;
+      }
+
+      function save() {
+        let data = {
+          name: document.getElementById("name").value,
+          price: Number(document.getElementById("price").value),
+          stock: Number(document.getElementById("stock").value),
+        };
+
+        if (!data.name || !data.price || !data.stock) {
+          alert("Isi semua field!");
+          return;
+        }
+
+        const tokenHeader = "Bearer " + localStorage.getItem("token");
+
+        if (editData) {
+          fetch(API + "/" + editData.id, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: tokenHeader,
+            },
+            body: JSON.stringify(data),
+          })
+            .then((r) => r.json())
+            .then((d) => {
+              alert(d.message || "Berhasil diupdate");
+              localStorage.removeItem("editProduct");
+              window.location = "products.html";
+            })
+            .catch((err) => console.error(err));
+        } else {
+          fetch(API, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: tokenHeader,
+            },
+            body: JSON.stringify(data),
+          })
+            .then((r) => r.json())
+            .then((d) => {
+              alert(d.message || "Produk ditambah");
+              window.location = "products.html";
+            })
+            .catch((err) => console.error(err));
+        }
+      }
+    </script>
+  </body>
+</html>

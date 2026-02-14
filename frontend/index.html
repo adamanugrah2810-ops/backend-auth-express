@@ -2,57 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Auth App</title>
+    <title>Dashboard App</title>
     <style>
-      body {
+      * {
         margin: 0;
+        padding: 0;
+        box-sizing: border-box;
         font-family: Arial;
-        background: #f2f2f2;
+      }
+      body {
+        background: #ecf0f1;
       }
 
-      .container {
-        width: 400px;
-        margin: 80px auto;
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-      }
-
-      input,
-      button {
-        width: 100%;
-        padding: 10px;
-        margin: 5px 0;
-      }
-
-      button {
-        background: #4caf50;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-
-      .hidden {
-        display: none;
-      }
-
-      /* DASHBOARD LAYOUT */
+      /* LAYOUT */
       .app {
         display: flex;
         height: 100vh;
       }
-
       .sidebar {
-        width: 200px;
+        width: 220px;
         background: #2c3e50;
         color: white;
         padding: 20px;
       }
-
       .sidebar h3 {
         text-align: center;
+        margin-bottom: 20px;
       }
-
       .sidebar a {
         display: block;
         color: white;
@@ -62,7 +38,6 @@
         background: #34495e;
         border-radius: 5px;
       }
-
       .sidebar a:hover {
         background: #1abc9c;
       }
@@ -70,76 +45,63 @@
       .content {
         flex: 1;
         padding: 20px;
-        background: #ecf0f1;
+      }
+      .navbar {
+        background: white;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        display: flex;
+        justify-content: space-between;
       }
 
       table {
         width: 100%;
         border-collapse: collapse;
+        margin-top: 10px;
         background: white;
       }
-
       th,
       td {
         border: 1px solid #ccc;
         padding: 8px;
       }
+      button {
+        padding: 5px 10px;
+      }
     </style>
   </head>
 
   <body>
-    <!-- REGISTER -->
-    <div class="container" id="registerBox">
-      <h2>Register</h2>
-      <input type="text" id="regName" placeholder="Nama" />
-      <input type="email" id="regEmail" placeholder="Email" />
-      <input type="password" id="regPassword" placeholder="Password" />
-      <button onclick="register()">Register</button>
-      <p>Sudah punya akun? <a href="#" onclick="showLogin()">Login</a></p>
-    </div>
-
-    <!-- LOGIN -->
-    <div class="container hidden" id="loginBox">
-      <h2>Login</h2>
-      <input type="email" id="loginEmail" placeholder="Email" />
-      <input type="password" id="loginPassword" placeholder="Password" />
-      <button onclick="login()">Login</button>
-      <p>Belum punya akun? <a href="#" onclick="showRegister()">Register</a></p>
-    </div>
-
-    <!-- DASHBOARD -->
-    <div class="app hidden" id="dashboardBox">
+    <div class="app">
       <div class="sidebar">
         <h3>My App</h3>
         <a href="#" onclick="showDashboard()">Dashboard</a>
-        <a href="#" onclick="showUsers()">User</a>
+        <a href="#" onclick="showUsers()">Users</a>
         <a href="#" onclick="logout()">Logout</a>
       </div>
 
-      <div class="content" id="mainContent">
-        <h2>Selamat Datang 🎉</h2>
-        <p>Ini adalah dashboard aplikasi kamu.</p>
+      <div class="content">
+        <div class="navbar">
+          <b>Dashboard</b>
+          <span>Backend Auth App</span>
+        </div>
+
+        <div id="mainContent">
+          <h2>Welcome 👋</h2>
+          <p>Ini adalah dashboard aplikasi.</p>
+        </div>
       </div>
     </div>
 
     <script>
       const API = "http://localhost:3000/api/auth";
 
-      function showLogin() {
-        registerBox.classList.add("hidden");
-        loginBox.classList.remove("hidden");
-      }
-
-      function showRegister() {
-        loginBox.classList.add("hidden");
-        registerBox.classList.remove("hidden");
+      /* PROTEKSI HALAMAN */
+      if (!localStorage.getItem("token")) {
+        window.location.href = "login.html";
       }
 
       function showDashboard() {
-        loginBox.classList.add("hidden");
-        registerBox.classList.add("hidden");
-        dashboardBox.classList.remove("hidden");
-
         mainContent.innerHTML = `
     <h2>Dashboard</h2>
     <p>Selamat datang di aplikasi Auth App.</p>
@@ -161,46 +123,6 @@
         loadUsers();
       }
 
-      // REGISTER
-      function register() {
-        fetch(API + "/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: regName.value,
-            email: regEmail.value,
-            password: regPassword.value,
-          }),
-        })
-          .then((r) => r.json())
-          .then((d) => {
-            alert(d.message);
-            showLogin();
-          });
-      }
-
-      // LOGIN
-      function login() {
-        fetch(API + "/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: loginEmail.value,
-            password: loginPassword.value,
-          }),
-        })
-          .then((r) => r.json())
-          .then((d) => {
-            if (d.token) {
-              localStorage.setItem("token", d.token);
-              showDashboard();
-            } else {
-              alert("Login gagal");
-            }
-          });
-      }
-
-      // LOAD USERS
       function loadUsers() {
         fetch(API + "/users", {
           headers: { Authorization: localStorage.getItem("token") },
@@ -210,19 +132,17 @@
             let html = "";
             users.forEach((u) => {
               html += `
-      <tr>
-        <td>${u.id}</td>
-        <td>${u.name}</td>
-        <td>${u.email}</td>
-        <td><button onclick="hapus(${u.id})">Hapus</button></td>
-      </tr>
-      `;
+    <tr>
+      <td>${u.id}</td>
+      <td>${u.name}</td>
+      <td>${u.email}</td>
+      <td><button onclick="hapus(${u.id})">Hapus</button></td>
+    </tr>`;
             });
             userTable.innerHTML = html;
           });
       }
 
-      // DELETE
       function hapus(id) {
         fetch(API + "/users/" + id, {
           method: "DELETE",
@@ -235,15 +155,9 @@
           });
       }
 
-      // LOGOUT
       function logout() {
         localStorage.removeItem("token");
-        showLogin();
-      }
-
-      // AUTO LOGIN
-      if (localStorage.getItem("token")) {
-        showDashboard();
+        window.location.href = "login.html";
       }
     </script>
   </body>
