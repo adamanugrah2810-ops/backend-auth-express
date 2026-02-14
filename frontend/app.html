@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Backend Auth App</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial;
+      }
+      body {
+        background: #f4f6f9;
+      }
+
+      /* LOGIN */
+      .login-box {
+        width: 350px;
+        margin: 100px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .login-box h2 {
+        text-align: center;
+      }
+      .login-box input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+      }
+      .login-box button {
+        width: 100%;
+        padding: 10px;
+        background: #2d89ef;
+        color: white;
+        border: none;
+      }
+
+      /* LAYOUT */
+      .wrapper {
+        display: flex;
+        height: 100vh;
+      }
+      .sidebar {
+        width: 220px;
+        background: #1e1e2f;
+        color: white;
+        padding: 20px;
+      }
+      .sidebar h3 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .sidebar a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .sidebar a:hover {
+        background: #2d89ef;
+      }
+
+      .content {
+        flex: 1;
+        padding: 20px;
+      }
+      .navbar {
+        background: white;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+      button {
+        padding: 5px 10px;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- LOGIN -->
+    <div id="loginBox" class="login-box">
+      <h2>Login</h2>
+      <input type="email" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+      <p style="text-align: center; margin-top: 10px">
+        Belum punya akun? <a href="#" onclick="showRegister()">Register</a>
+      </p>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="registerBox" class="login-box hidden">
+      <h2>Register</h2>
+      <input type="text" id="name" placeholder="Nama" />
+      <input type="email" id="regEmail" placeholder="Email" />
+      <input type="password" id="regPassword" placeholder="Password" />
+      <button onclick="register()">Register</button>
+      <p style="text-align: center; margin-top: 10px">
+        Sudah punya akun? <a href="#" onclick="showLogin()">Login</a>
+      </p>
+    </div>
+
+    <!-- APP -->
+    <div id="app" class="wrapper hidden">
+      <div class="sidebar">
+        <h3>My App</h3>
+        <a href="#" onclick="showDashboard()">Dashboard</a>
+        <a href="#" onclick="loadUsers()">Users</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </div>
+
+      <div class="content">
+        <div class="navbar">
+          <b>Dashboard</b>
+          <span>Backend Auth App</span>
+        </div>
+
+        <div id="dashboard">
+          <h2>Welcome 👋</h2>
+          <p>Login berhasil. Ini adalah dashboard aplikasi.</p>
+        </div>
+
+        <div id="users" class="hidden">
+          <h2>Daftar Users</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="userTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API = "http://localhost:3000/api/auth";
+
+      function showRegister() {
+        loginBox.classList.add("hidden");
+        registerBox.classList.remove("hidden");
+      }
+      function showLogin() {
+        registerBox.classList.add("hidden");
+        loginBox.classList.remove("hidden");
+      }
+
+      function showApp() {
+        loginBox.classList.add("hidden");
+        registerBox.classList.add("hidden");
+        app.classList.remove("hidden");
+        showDashboard();
+      }
+
+      function showDashboard() {
+        dashboard.classList.remove("hidden");
+        users.classList.add("hidden");
+      }
+
+      function showUsers() {
+        dashboard.classList.add("hidden");
+        users.classList.remove("hidden");
+      }
+
+      function register() {
+        fetch(API + "/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name.value,
+            email: regEmail.value,
+            password: regPassword.value,
+          }),
+        })
+          .then((r) => r.json())
+          .then((d) => {
+            alert(d.message);
+            showLogin();
+          });
+      }
+
+      function login() {
+        fetch(API + "/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: email.value,
+            password: password.value,
+          }),
+        })
+          .then((r) => r.json())
+          .then((d) => {
+            if (d.token) {
+              localStorage.setItem("token", d.token);
+              showApp();
+            } else {
+              alert("Login gagal");
+            }
+          });
+      }
+
+      function loadUsers() {
+        showUsers();
+        fetch(API + "/users", {
+          headers: { Authorization: localStorage.getItem("token") },
+        })
+          .then((r) => r.json())
+          .then((users) => {
+            let html = "";
+            users.forEach((u) => {
+              html += `
+    <tr>
+      <td>${u.id}</td>
+      <td>${u.name}</td>
+      <td>${u.email}</td>
+      <td><button onclick="hapus(${u.id})">Hapus</button></td>
+    </tr>`;
+            });
+            userTable.innerHTML = html;
+          });
+      }
+
+      function hapus(id) {
+        fetch(API + "/users/" + id, {
+          method: "DELETE",
+          headers: { Authorization: localStorage.getItem("token") },
+        })
+          .then((r) => r.json())
+          .then((d) => {
+            alert(d.message);
+            loadUsers();
+          });
+      }
+
+      function logout() {
+        localStorage.removeItem("token");
+        location.reload();
+      }
+
+      if (localStorage.getItem("token")) {
+        showApp();
+      }
+    </script>
+  </body>
+</html>
