@@ -1,45 +1,190 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
-    <title>Add Product</title>
-    <link rel="stylesheet" href="layout.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen Produk | Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .input-focus:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        outline: none;
+      }
+    </style>
   </head>
-  <body>
-    <div class="app">
-      <div class="sidebar">
-        <h3>My App</h3>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="products.html">Products</a>
+  <body class="bg-slate-50 min-h-screen flex">
+    <aside
+      class="w-64 bg-slate-900 text-white flex flex-col fixed h-full z-10 transition-all"
+    >
+      <div class="p-8">
+        <div class="flex items-center gap-3 mb-10">
+          <div
+            class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/40"
+          >
+            <span class="text-xl font-bold">A</span>
+          </div>
+          <h3 class="text-xl font-bold tracking-tight">
+            Admin<span class="text-blue-500">Panel</span>
+          </h3>
+        </div>
+        <nav class="space-y-2">
+          <a
+            href="dashboard.html"
+            class="flex items-center gap-3 p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all"
+          >
+            Dashboard
+          </a>
+          <a
+            href="products.html"
+            class="flex items-center gap-3 p-3 bg-blue-600 text-white rounded-xl shadow-lg"
+          >
+            Products
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <main class="ml-64 flex-1 p-10 flex flex-col items-center">
+      <div class="w-full max-w-2xl mb-8 flex justify-between items-center">
+        <div>
+          <nav class="text-sm text-slate-400 mb-2 font-medium">
+            Inventory &bull; Product Form
+          </nav>
+          <h1
+            id="title"
+            class="text-4xl font-extrabold text-slate-900 tracking-tight"
+          >
+            Tambah Produk
+          </h1>
+        </div>
+        <div
+          id="badgeStatus"
+          class="hidden px-4 py-2 bg-amber-50 text-amber-600 rounded-2xl text-xs font-bold border border-amber-100 uppercase tracking-widest"
+        >
+          Edit Mode
+        </div>
       </div>
 
-      <div class="content">
-        <div class="navbar">Form Produk</div>
+      <div
+        class="w-full max-w-2xl bg-white rounded-[2.5rem] shadow-sm border border-slate-100 p-12 relative overflow-hidden"
+      >
+        <div
+          class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-bl-full pointer-events-none"
+        ></div>
 
-        <h2 id="title">Tambah Produk</h2>
+        <div class="space-y-8">
+          <div class="group">
+            <label
+              class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1 transition-colors group-focus-within:text-blue-500"
+              >Nama Produk</label
+            >
+            <div class="relative">
+              <input
+                id="name"
+                type="text"
+                placeholder="Contoh: MacBook Air M2"
+                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-semibold text-slate-700 input-focus transition-all"
+              />
+            </div>
+          </div>
 
-        <label>Nama Produk</label>
-        <input id="name" type="text" />
+          <div class="grid grid-cols-2 gap-8">
+            <div class="group">
+              <label
+                class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1 transition-colors group-focus-within:text-blue-500"
+                >Harga Unit (IDR)</label
+              >
+              <input
+                id="price"
+                type="number"
+                placeholder="0"
+                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-semibold text-slate-700 input-focus transition-all"
+              />
+            </div>
+            <div class="group">
+              <label
+                class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1 transition-colors group-focus-within:text-blue-500"
+                >Stok Awal</label
+              >
+              <input
+                id="stock"
+                type="number"
+                placeholder="0"
+                class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-semibold text-slate-700 input-focus transition-all"
+              />
+            </div>
+          </div>
 
-        <label>Harga</label>
-        <input id="price" type="number" />
+          <div class="pt-6 flex flex-col gap-4">
+            <button
+              onclick="save()"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-2xl shadow-xl shadow-blue-500/20 transition-all hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+              Simpan Data Produk
+            </button>
 
-        <label>Stok</label>
-        <input id="stock" type="number" />
-
-        <br /><br />
-
-        <button type="button" onclick="save()">Simpan</button>
-        <a href="products.html"><button type="button">Kembali</button></a>
+            <a href="products.html" class="w-full">
+              <button
+                type="button"
+                class="w-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold py-5 rounded-2xl transition-all flex items-center justify-center gap-2"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  ></path>
+                </svg>
+                Kembali ke Daftar
+              </button>
+            </a>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <p class="mt-8 text-slate-400 text-sm">
+        Pastikan semua data sudah benar sebelum menekan tombol simpan.
+      </p>
+    </main>
 
     <script>
       const API = "http://localhost:3000/api/products";
+      const tokenHeader = "Bearer " + localStorage.getItem("token");
 
+      // Ambil data dari localStorage jika sedang mode edit
       let editData = JSON.parse(localStorage.getItem("editProduct"));
 
+      // Inisialisasi Mode Edit
       if (editData) {
-        document.getElementById("title").innerText = "Edit Produk";
+        document.getElementById("title").innerText = "Perbarui Produk";
+        document.getElementById("badgeStatus").classList.remove("hidden");
         document.getElementById("name").value = editData.n;
         document.getElementById("price").value = editData.p;
         document.getElementById("stock").value = editData.s;
@@ -52,45 +197,36 @@
           stock: Number(document.getElementById("stock").value),
         };
 
-        if (!data.name || !data.price || !data.stock) {
-          alert("Isi semua field!");
+        if (!data.name || !data.price || data.stock === "") {
+          alert("⚠️ Harap lengkapi semua data!");
           return;
         }
 
-        const tokenHeader = "Bearer " + localStorage.getItem("token");
+        const method = editData ? "PUT" : "POST";
+        const url = editData ? `${API}/${editData.id}` : API;
 
-        if (editData) {
-          fetch(API + "/" + editData.id, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: tokenHeader,
-            },
-            body: JSON.stringify(data),
+        fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: tokenHeader,
+          },
+          body: JSON.stringify(data),
+        })
+          .then((r) => r.json())
+          .then((d) => {
+            alert(
+              editData
+                ? "✅ Produk berhasil diperbarui!"
+                : "✅ Produk berhasil ditambahkan!",
+            );
+            localStorage.removeItem("editProduct"); // Selalu bersihkan memori
+            window.location = "products.html";
           })
-            .then((r) => r.json())
-            .then((d) => {
-              alert(d.message || "Berhasil diupdate");
-              localStorage.removeItem("editProduct");
-              window.location = "products.html";
-            })
-            .catch((err) => console.error(err));
-        } else {
-          fetch(API, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: tokenHeader,
-            },
-            body: JSON.stringify(data),
-          })
-            .then((r) => r.json())
-            .then((d) => {
-              alert(d.message || "Produk ditambah");
-              window.location = "products.html";
-            })
-            .catch((err) => console.error(err));
-        }
+          .catch((err) => {
+            console.error(err);
+            alert("❌ Terjadi kesalahan pada server.");
+          });
       }
     </script>
   </body>

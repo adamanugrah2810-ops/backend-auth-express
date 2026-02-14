@@ -13,10 +13,6 @@
       body {
         font-family: "Inter", sans-serif;
       }
-      .glass-effect {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-      }
     </style>
   </head>
   <body class="bg-slate-50 min-h-screen flex">
@@ -34,107 +30,26 @@
             Admin<span class="text-blue-500">Panel</span>
           </h3>
         </div>
-
         <nav class="space-y-2">
           <a
             href="dashboard.html"
-            class="flex items-center gap-3 p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all duration-200"
+            class="flex items-center gap-3 p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all"
           >
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              ></path>
-            </svg>
             Dashboard
           </a>
           <a
-            href="users.html"
-            class="flex items-center gap-3 p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all duration-200"
-          >
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-              ></path>
-            </svg>
-            Users
-          </a>
-          <a
             href="products.html"
-            class="flex items-center gap-3 p-3 bg-blue-600 text-white rounded-xl shadow-lg shadow-blue-600/20"
+            class="flex items-center gap-3 p-3 bg-blue-600 text-white rounded-xl shadow-lg shadow-blue-600/20 transition-all"
           >
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-              ></path>
-            </svg>
             Products
           </a>
           <a
-            href="reports.html"
-            class="flex items-center gap-3 p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all duration-200"
+            href="users.html"
+            class="flex items-center gap-3 p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all"
           >
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 17v-2m3 2v-4m3 2v-6m-9-3h12a2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2z"
-              ></path>
-            </svg>
-            Reports
+            Users
           </a>
         </nav>
-      </div>
-
-      <div class="mt-auto p-6 border-t border-slate-800">
-        <button
-          onclick="logout()"
-          class="flex items-center gap-3 w-full p-3 text-red-400 hover:bg-red-500/10 rounded-xl transition-all font-medium"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-            ></path>
-          </svg>
-          Logout
-        </button>
       </div>
     </aside>
 
@@ -149,7 +64,10 @@
           </h1>
         </div>
 
-        <a href="add-product.html">
+        <a
+          href="add-product.html"
+          onclick="localStorage.removeItem('editProduct')"
+        >
           <button
             class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-bold shadow-xl shadow-blue-600/20 transition-all hover:-translate-y-1 active:scale-95 flex items-center gap-2"
           >
@@ -178,27 +96,27 @@
           <thead>
             <tr class="bg-slate-50/50 border-b border-slate-100">
               <th
-                class="py-5 px-8 text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em]"
+                class="py-5 px-8 text-[11px] font-bold text-slate-400 uppercase tracking-widest"
               >
                 ID
               </th>
               <th
-                class="py-5 px-8 text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em]"
+                class="py-5 px-8 text-[11px] font-bold text-slate-400 uppercase tracking-widest"
               >
                 Informasi Produk
               </th>
               <th
-                class="py-5 px-8 text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em]"
+                class="py-5 px-8 text-[11px] font-bold text-slate-400 uppercase tracking-widest"
               >
                 Harga Unit
               </th>
               <th
-                class="py-5 px-8 text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em]"
+                class="py-5 px-8 text-[11px] font-bold text-slate-400 uppercase tracking-widest"
               >
                 Status Stok
               </th>
               <th
-                class="py-5 px-8 text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em] text-center"
+                class="py-5 px-8 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center"
               >
                 Aksi
               </th>
@@ -216,121 +134,97 @@
           </tbody>
         </table>
       </div>
-
-      <footer class="mt-8 text-slate-400 text-sm flex justify-between px-2">
-        <p>&copy; 2024 My App Dashboard System</p>
-        <p>
-          Server Status:
-          <span
-            class="text-green-500 font-bold underline underline-offset-4 decoration-2"
-            >Online</span
-          >
-        </p>
-      </footer>
     </main>
 
     <script>
       const API = "http://localhost:3000/api/products";
-      const productTable = document.getElementById("productTable");
       const tokenHeader = "Bearer " + localStorage.getItem("token");
 
-      // Fungsi format Rupiah yang rapi
-      const formatRupiah = (number) => {
-        return new Intl.NumberFormat("id-ID", {
+      // Format mata uang Rupiah
+      const formatRupiah = (n) =>
+        new Intl.NumberFormat("id-ID", {
           style: "currency",
           currency: "IDR",
           minimumFractionDigits: 0,
-        }).format(number);
-      };
+        }).format(n);
 
+      // Mengambil data dari database
       function loadProducts() {
-        fetch(API, {
-          headers: { Authorization: tokenHeader },
-        })
-          .then((r) => r.json())
+        fetch(API, { headers: { Authorization: tokenHeader } })
+          .then((r) => {
+            if (!r.ok) throw new Error("Gagal akses API");
+            return r.json();
+          })
           .then((data) => {
             let products = data.products || data;
             let html = "";
 
             if (products.length === 0) {
-              html = `<tr><td colspan="5" class="p-20 text-center text-slate-400 italic">Belum ada produk yang terdaftar.</td></tr>`;
+              html = `<tr><td colspan="5" class="p-10 text-center text-slate-400 italic">Belum ada produk.</td></tr>`;
             } else {
               products.forEach((p) => {
-                // Logika warna stok
                 const stockColor =
                   p.stock < 10
                     ? "bg-red-50 text-red-600 border-red-100"
                     : "bg-emerald-50 text-emerald-600 border-emerald-100";
 
                 html += `
-                        <tr class="group hover:bg-slate-50/80 transition-all duration-200">
-                            <td class="py-6 px-8 text-sm font-mono text-slate-400">#${p.id}</td>
-                            <td class="py-6 px-8">
-                                <div class="font-bold text-slate-800 text-lg group-hover:text-blue-600 transition-colors">${p.name}</div>
-                                <div class="text-xs text-slate-400 font-medium uppercase mt-1">Category: General</div>
-                            </td>
-                            <td class="py-6 px-8">
-                                <span class="text-slate-700 font-semibold">${formatRupiah(p.price)}</span>
-                            </td>
-                            <td class="py-6 px-8">
-                                <span class="px-3 py-1.5 rounded-full text-xs font-bold border ${stockColor}">
-                                    ${p.stock} Available
-                                </span>
-                            </td>
-                            <td class="py-6 px-8">
-                                <div class="flex justify-center gap-2">
-                                    <button onclick="edit(${p.id},'${p.name}',${p.price},${p.stock})" 
-                                        class="bg-white border border-slate-200 hover:border-blue-500 hover:text-blue-600 text-slate-600 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95">
-                                        Edit
-                                    </button>
-                                    <button onclick="hapus(${p.id})" 
-                                        class="bg-white border border-slate-200 hover:border-red-500 hover:text-red-600 text-slate-600 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95">
-                                        Hapus
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>`;
+                                <tr class="group hover:bg-slate-50 transition-all duration-200">
+                                    <td class="py-6 px-8 text-sm font-mono text-slate-400">#${p.id}</td>
+                                    <td class="py-6 px-8">
+                                        <div class="font-bold text-slate-800 text-lg group-hover:text-blue-600 transition-colors">${p.name}</div>
+                                    </td>
+                                    <td class="py-6 px-8 font-semibold text-slate-700">${formatRupiah(p.price)}</td>
+                                    <td class="py-6 px-8">
+                                        <span class="px-3 py-1.5 rounded-full text-xs font-bold border ${stockColor}">${p.stock} Available</span>
+                                    </td>
+                                    <td class="py-6 px-8">
+                                        <div class="flex justify-center gap-2">
+                                            <button onclick="edit(${p.id},'${p.name}',${p.price},${p.stock})" 
+                                                class="bg-white border border-slate-200 hover:border-blue-500 hover:text-blue-600 px-4 py-2 rounded-xl text-sm font-bold transition-all active:scale-95 shadow-sm">
+                                                Edit
+                                            </button>
+                                            <button onclick="hapus(${p.id})" 
+                                                class="bg-white border border-slate-200 hover:border-red-500 hover:text-red-600 px-4 py-2 rounded-xl text-sm font-bold transition-all active:scale-95 shadow-sm">
+                                                Hapus
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>`;
               });
             }
-            productTable.innerHTML = html;
+            document.getElementById("productTable").innerHTML = html;
           })
           .catch((err) => {
             console.error(err);
-            productTable.innerHTML = `<tr><td colspan="5" class="p-10 text-center text-red-500">Gagal memuat data. Periksa koneksi ke API.</td></tr>`;
+            document.getElementById("productTable").innerHTML =
+              `<tr><td colspan="5" class="p-10 text-center text-red-500">Error: Gagal memuat data dari server.</td></tr>`;
           });
       }
 
+      // Fungsi Arahkan ke halaman edit
       function edit(id, n, p, s) {
         localStorage.setItem("editProduct", JSON.stringify({ id, n, p, s }));
-        window.location = "add-product.html";
+        // Pastikan Anda sudah membuat file edit-product.html
+        window.location = "edit-product.html";
       }
 
+      // Fungsi Hapus Produk
       function hapus(id) {
-        if (
-          confirm(
-            "Anda yakin ingin menghapus produk ini? Tindakan ini tidak dapat dibatalkan.",
-          )
-        ) {
+        if (confirm("Apakah Anda yakin ingin menghapus produk ini?")) {
           fetch(API + "/" + id, {
             method: "DELETE",
             headers: { Authorization: tokenHeader },
           })
             .then((r) => r.json())
-            .then((d) => {
-              loadProducts();
+            .then(() => {
+              loadProducts(); // Refresh tabel setelah hapus
             })
-            .catch((err) => console.error(err));
+            .catch((err) => alert("Gagal menghapus produk"));
         }
       }
 
-      function logout() {
-        if (confirm("Apakah Anda ingin keluar?")) {
-          localStorage.removeItem("token");
-          window.location = "login.html";
-        }
-      }
-
-      // Inisialisasi
+      // Jalankan saat halaman dibuka
       loadProducts();
     </script>
   </body>
