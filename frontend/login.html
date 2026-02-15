@@ -1,38 +1,160 @@
 <!doctype html>
-<html>
+<html lang="id">
   <head>
-    <title>Login</title>
-    <link rel="stylesheet" href="layout.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Eksklusif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+          url("https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1920");
+        background-size: cover;
+        background-position: center;
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .luxury-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      }
+
+      .gold-glow:focus {
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        border-color: rgba(212, 175, 55, 0.8);
+      }
+
+      .btn-gold {
+        background: linear-gradient(
+          135deg,
+          #d4af37 0%,
+          #f9e29d 50%,
+          #b8860b 100%
+        );
+        color: #1a1a1a;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+      }
+
+      .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        filter: brightness(1.1);
+      }
+
+      h2 {
+        font-family: "Playfair Display", serif;
+      }
+    </style>
   </head>
-  <body>
-    <div class="form-box">
-      <h2>Login</h2>
-      <input id="email" placeholder="Email" />
-      <input id="password" type="password" placeholder="Password" />
-      <button onclick="login()">Login</button>
-      <p>Belum punya akun? <a href="register.html">Register</a></p>
+  <body class="p-6">
+    <div class="luxury-card w-full max-w-md p-10 rounded-3xl text-white">
+      <div class="text-center mb-10">
+        <h2 class="text-4xl mb-2 tracking-wide text-[#d4af37]">Royal Login</h2>
+        <div class="h-1 w-20 bg-[#d4af37] mx-auto rounded-full"></div>
+        <p class="text-gray-400 mt-4 font-light italic">
+          Silakan masuk ke ruang eksklusif Anda
+        </p>
+      </div>
+
+      <div class="space-y-6">
+        <div class="relative">
+          <label
+            class="block text-xs uppercase tracking-widest text-[#d4af37] mb-2 ml-1"
+            >Alamat Email</label
+          >
+          <input
+            id="email"
+            type="email"
+            placeholder="name@luxury.com"
+            class="w-full bg-black/40 border border-white/10 px-4 py-3 rounded-xl outline-none gold-glow transition-all placeholder:text-gray-600"
+          />
+        </div>
+
+        <div class="relative">
+          <label
+            class="block text-xs uppercase tracking-widest text-[#d4af37] mb-2 ml-1"
+            >Kata Sandi</label
+          >
+          <input
+            id="password"
+            type="password"
+            placeholder="••••••••"
+            class="w-full bg-black/40 border border-white/10 px-4 py-3 rounded-xl outline-none gold-glow transition-all placeholder:text-gray-600"
+          />
+        </div>
+
+        <button
+          onclick="login()"
+          class="btn-gold w-full py-4 rounded-xl mt-4 active:scale-95"
+        >
+          Masuk Sekarang
+        </button>
+      </div>
+
+      <div class="mt-10 text-center">
+        <p class="text-gray-400 text-sm">
+          Belum memiliki akses?
+          <a
+            href="register.html"
+            class="text-[#d4af37] hover:text-[#f9e29d] font-semibold transition-colors"
+            >Daftar Member</a
+          >
+        </p>
+      </div>
     </div>
 
     <script>
       const API = "http://localhost:3000/api/auth";
-      function login() {
-        fetch(API + "/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: email.value,
-            password: password.value,
-          }),
-        })
-          .then((r) => r.json())
-          .then((d) => {
-            if (d.token) {
-              localStorage.setItem("token", d.token);
-              window.location.href = "dashboard.html";
-            } else {
-              alert("Login gagal");
-            }
+
+      async function login() {
+        const emailInput = document.getElementById("email").value;
+        const passwordInput = document.getElementById("password").value;
+
+        if (!emailInput || !passwordInput) {
+          alert("Mohon isi email dan password Anda.");
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: emailInput,
+              password: passwordInput,
+            }),
           });
+
+          const data = await response.json();
+
+          if (data.token) {
+            localStorage.setItem("token", data.token);
+            // Efek transisi sederhana sebelum pindah
+            document.body.style.opacity = "0";
+            setTimeout(() => {
+              window.location.href = "dashboard.html";
+            }, 500);
+          } else {
+            alert("Akses ditolak. Silakan periksa kembali kredensial Anda.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Gagal terhubung ke server eksklusif.");
+        }
       }
     </script>
   </body>

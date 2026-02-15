@@ -1,36 +1,193 @@
 <!doctype html>
-<html>
+<html lang="id">
   <head>
-    <title>Register</title>
-    <link rel="stylesheet" href="layout.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Eksklusif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        /* Menggunakan background yang sama agar transisi antar halaman terasa seamless */
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
+          url("https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1920");
+        background-size: cover;
+        background-position: center;
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .luxury-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      }
+
+      .gold-glow:focus {
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        border-color: rgba(212, 175, 55, 0.6);
+      }
+
+      .btn-gold {
+        background: linear-gradient(
+          135deg,
+          #d4af37 0%,
+          #f9e29d 50%,
+          #b8860b 100%
+        );
+        color: #1a1a1a;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+      }
+
+      .btn-gold:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(212, 175, 55, 0.4);
+        filter: brightness(1.15);
+      }
+
+      h2 {
+        font-family: "Playfair Display", serif;
+      }
+
+      /* Animasi masuk */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade {
+        animation: fadeIn 0.8s ease-out;
+      }
+    </style>
   </head>
-  <body>
-    <div class="form-box">
-      <h2>Register</h2>
-      <input id="name" placeholder="Nama" />
-      <input id="email" placeholder="Email" />
-      <input id="password" type="password" placeholder="Password" />
-      <button onclick="register()">Register</button>
-      <p>Sudah punya akun? <a href="login.html">Login</a></p>
+  <body class="p-6">
+    <div
+      class="luxury-card w-full max-w-lg p-10 rounded-[2rem] text-white animate-fade"
+    >
+      <div class="text-center mb-8">
+        <h2 class="text-4xl mb-2 tracking-wide text-[#d4af37]">
+          Join the Elite
+        </h2>
+        <div
+          class="h-[1px] w-32 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto"
+        ></div>
+        <p class="text-gray-400 mt-4 font-light italic">
+          Daftarkan diri Anda untuk akses tanpa batas
+        </p>
+      </div>
+
+      <div class="space-y-5">
+        <div>
+          <label
+            class="block text-[10px] uppercase tracking-[0.2em] text-[#d4af37] mb-2 ml-1 opacity-80"
+            >Nama Lengkap</label
+          >
+          <input
+            id="name"
+            type="text"
+            placeholder="Masukkan nama Anda..."
+            class="w-full bg-black/30 border border-white/5 px-5 py-4 rounded-2xl outline-none gold-glow transition-all placeholder:text-gray-700 text-sm"
+          />
+        </div>
+
+        <div>
+          <label
+            class="block text-[10px] uppercase tracking-[0.2em] text-[#d4af37] mb-2 ml-1 opacity-80"
+            >Alamat Email</label
+          >
+          <input
+            id="email"
+            type="email"
+            placeholder="nama@email.com"
+            class="w-full bg-black/30 border border-white/5 px-5 py-4 rounded-2xl outline-none gold-glow transition-all placeholder:text-gray-700 text-sm"
+          />
+        </div>
+
+        <div>
+          <label
+            class="block text-[10px] uppercase tracking-[0.2em] text-[#d4af37] mb-2 ml-1 opacity-80"
+            >Kata Sandi</label
+          >
+          <input
+            id="password"
+            type="password"
+            placeholder="••••••••"
+            class="w-full bg-black/30 border border-white/5 px-5 py-4 rounded-2xl outline-none gold-glow transition-all placeholder:text-gray-700 text-sm"
+          />
+        </div>
+
+        <button
+          onclick="register()"
+          class="btn-gold w-full py-4 rounded-2xl mt-6 active:scale-95 shadow-lg"
+        >
+          Daftar Sekarang
+        </button>
+      </div>
+
+      <div class="mt-8 text-center">
+        <p class="text-gray-500 text-xs tracking-wide">
+          Sudah memiliki keanggotaan?
+          <a
+            href="login.html"
+            class="text-[#d4af37] hover:text-[#f9e29d] font-bold transition-all ml-1"
+            >LOG IN</a
+          >
+        </p>
+      </div>
     </div>
 
     <script>
       const API = "http://localhost:3000/api/auth";
-      function register() {
-        fetch(API + "/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: name.value,
-            email: email.value,
-            password: password.value,
-          }),
-        })
-          .then((r) => r.json())
-          .then((d) => {
-            alert(d.message);
-            window.location.href = "login.html";
+
+      async function register() {
+        const nameValue = document.getElementById("name").value;
+        const emailValue = document.getElementById("email").value;
+        const passwordValue = document.getElementById("password").value;
+
+        if (!nameValue || !emailValue || !passwordValue) {
+          alert("Mohon lengkapi seluruh data Anda.");
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: nameValue,
+              email: emailValue,
+              password: passwordValue,
+            }),
           });
+
+          const data = await response.json();
+
+          // Alert mewah menggunakan bawaan browser (bisa diganti SweetAlert2 nanti)
+          alert(data.message || "Pendaftaran Berhasil!");
+
+          if (response.ok) {
+            window.location.href = "login.html";
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Maaf, terjadi kesalahan pada sistem kami.");
+        }
       }
     </script>
   </body>
